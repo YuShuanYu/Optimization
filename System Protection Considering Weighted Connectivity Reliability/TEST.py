@@ -35,61 +35,63 @@ import networkx as nx
 # to give high score to more zero'ed chromosomes
 def eval_func(chromosome):
     l = len(chromosome)
-    function = []
-    for i in S:
-        function.append([1] * l)
-    for indexs,s in enumerate(S):
-        for indexxi,j in enumerate(xi[indexs]):
-            if chromosome[indexxi] == 1:
-                function[indexs][indexxi] = 1
-            else:
-                function[indexs][indexxi] = j
-    #full graph
-    G=nx.DiGraph()
-    G.add_nodes_from(nodes)
-    for i in range(len(tt)):
-        G.add_edge(paths[i][0],paths[i][1], dis = tt[i])
-    sh_before = []
-    for i in OD:
-        distance=nx.shortest_path_length(G,source=i[0],target=i[1],weight='dis')
-        sh_before.append(distance)
     
-    #graph after disaster
-    s_shafter = []
-    for indexs,s in enumerate(S):
-        GA=nx.DiGraph()
-        newpaths = []
-        newtt = []
-        for i,j in enumerate(paths):
-            if function[indexs][i] == 1:
-                newpaths.append(j)
-                newtt.append(tt[i])
-        GA.add_nodes_from(nodes)
-        for i in range(len(newtt)):
-            GA.add_edge(newpaths[i][0],newpaths[i][1], dis = newtt[i])
-        sh_after = []
-        for i in OD:
-            try:
-                distance=nx.shortest_path_length(GA,source=i[0],target=i[1],weight='dis')
-                sh_after.append(distance)
-            except nx.NetworkXNoPath:
-                sh_after.append(m)
-        s_shafter.append(sh_after)
-    
-    obj = 0
-    for indexs,s in enumerate(S):
-        directness_weight = 0
-        for i,j in enumerate(s_shafter[indexs]):
-            directness = sh_before[i]/j
-            directness_weight += directness*demand[i]
-        obj += pro[indexs]*directness_weight
-    
-    totalcost = 0
+    totalcost = 0    
     for i,j in enumerate(chromosome):
         if j == 1:
             totalcost += protect_cost[i]
     if totalcost > budget:
         obj = (10-totalcost)
+    else:
+    
+        function = []
+        for i in S:
+            function.append([1] * l)
+        for indexs,s in enumerate(S):
+            for indexxi,j in enumerate(xi[indexs]):
+                if chromosome[indexxi] == 1:
+                    function[indexs][indexxi] = 1
+                else:
+                    function[indexs][indexxi] = j
+        #full graph
+        G=nx.DiGraph()
+        G.add_nodes_from(nodes)
+        for i in range(len(tt)):
+            G.add_edge(paths[i][0],paths[i][1], dis = tt[i])
+        sh_before = []
+        for i in OD:
+            distance=nx.shortest_path_length(G,source=i[0],target=i[1],weight='dis')
+            sh_before.append(distance)
+        
+        #graph after disaster
+        s_shafter = []
+        for indexs,s in enumerate(S):
+            GA=nx.DiGraph()
+            newpaths = []
+            newtt = []
+            for i,j in enumerate(paths):
+                if function[indexs][i] == 1:
+                    newpaths.append(j)
+                    newtt.append(tt[i])
+            GA.add_nodes_from(nodes)
+            for i in range(len(newtt)):
+                GA.add_edge(newpaths[i][0],newpaths[i][1], dis = newtt[i])
+            sh_after = []
+            for i in OD:
+                try:
+                    distance=nx.shortest_path_length(GA,source=i[0],target=i[1],weight='dis')
+                    sh_after.append(distance)
+                except nx.NetworkXNoPath:
+                    sh_after.append(m)
+            s_shafter.append(sh_after)
+        
+        obj = 0
+        for indexs,s in enumerate(S):
+            directness_weight = 0
+            for i,j in enumerate(s_shafter[indexs]):
+                directness = sh_before[i]/j
+                directness_weight += directness*demand[i]
+            obj += pro[indexs]*directness_weight
     
     return obj*10
 
