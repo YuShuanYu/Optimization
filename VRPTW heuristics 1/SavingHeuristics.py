@@ -3,7 +3,7 @@
 import copy
 
 
-# In[80]:
+# In[]:
 
 
 xcoord = [  35.00      , 41.00      , 35.00      , 55.00      , 55.00      , 15.00      , 25.00      , 20.00      , 10.00      , 55.00      , 30.00      , 20.00      , 50.00      , 30.00      , 15.00      , 30.00      , 10.00      ,   5.00      , 20.00      , 15.00      , 45.00      , 45.00      , 45.00      , 55.00      , 65.00      , 65.00      , 45.00      , 35.00      , 41.00      , 64.00      , 40.00      , 31.00      , 35.00      , 53.00      , 65.00      , 63.00      ,   2.00      , 20.00      ,   5.00      , 60.00      , 40.00      , 42.00      , 24.00      , 23.00      , 11.00      ,   6.00      ,   2.00      ,   8.00      , 13.00      ,   6.00      , 47.00      , 49.00      , 27.00      , 37.00      , 57.00      , 63.00      , 53.00      , 32.00      , 36.00      , 21.00      , 17.00      , 12.00      , 24.00      , 27.00      , 15.00      , 62.00      , 49.00      , 67.00      , 56.00      , 37.00      , 37.00      , 57.00      , 47.00      , 44.00      , 46.00      , 49.00      , 49.00      , 53.00      , 61.00      , 57.00      , 56.00      , 55.00      , 15.00      , 14.00      , 11.00      , 16.00      ,   4.00      , 28.00      , 26.00      , 26.00      , 31.00      , 15.00      , 22.00      , 18.00      , 26.00      , 25.00      , 22.00      , 25.00      , 19.00      , 20.00      , 18.00   ]  
@@ -17,7 +17,7 @@ M = 100000
 acw = -10
 
 
-# In[81]:
+# In[]:
 
 
 n = len(xcoord)
@@ -27,7 +27,7 @@ for i in range(1,n):
     link.append([i,0])
 
 
-# In[82]:
+# In[]:
 
 
 distance_matrix = []
@@ -41,7 +41,7 @@ for i in range(n):
     distance_matrix.append(distance_list)
 
 
-# In[83]:
+# In[]:
 
 
 total_distance = 0
@@ -49,18 +49,17 @@ for i in link:
     total_distance += distance_matrix[i[0]][i[1]]
 
 
-# In[84]:
-
-
+# In[]:
+'''
 #排序過的route
-#route = []
-#sortindex = sorted(range(len(ready_time)), key=lambda k: ready_time[k])
-#for i in sortindex:
-#    route.append([i])
-#del route[0]
+route = []
+sortindex = sorted(range(len(ready_time)), key=lambda k: ready_time[k])
+for i in sortindex:
+    route.append([i])
+del route[0]
+'''
 
-
-# In[85]:
+# In[]:
 
 
 #為排序過的route
@@ -70,7 +69,7 @@ for i in range(1,n):
 print "At the beginning, number of cars is",len(route)
 
 
-# In[86]:
+# In[]:
 
 
 #計算每一點最初的離開時間
@@ -84,7 +83,7 @@ for i in route:
     leavetime.append([counttime])
 
 
-# In[87]:
+# In[]:
 
 
 update_route = 1
@@ -127,7 +126,7 @@ while update_route == 1:
                     if indexr < indexrc:
                         continue
                     else:
-                        if leavetimechange[-1]+distance_matrix[route_change[indexr-1]][r]+service_time[r] >= due_time[r]:
+                        if leavetimechange[-1]+distance_matrix[route_change[indexr-1]][r]+service_time[r] > due_time[r]:
                             #print rex,'over due time'
                             break
                         else:
@@ -156,22 +155,15 @@ while update_route == 1:
         if update_route == 1:
             count += 1
             break
-        
 
 
-# In[88]:
-
-
-#print count
-
-
-# In[89]:
+# In[]:
 
 
 print 'After SH, number of cars is',len(route)
 
 
-# In[90]:
+# In[]:
 
 
 totaltraveltime = []
@@ -183,7 +175,7 @@ for indexi,i in enumerate(totaltraveltime):
 print 'Total travel time is',sum(totaltraveltime)
 
 
-# In[91]:
+# In[]:
 
 
 eachdemand = []
@@ -198,14 +190,14 @@ for indexi,i in enumerate(eachdemand):
     print indexi,i
 
 
-# In[92]:
+# In[]:
 
 print 'Each route is:'
 for indexi,i in enumerate(route):
     print indexi,i
 
 
-# In[93]:
+# In[]:
 
 print 'Leave time for each route:'
 for indexi,i in enumerate(leavetime):
